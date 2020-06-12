@@ -1,18 +1,20 @@
 pipeline {
   agent any
-  environment {
-    PATH = "${PATH}:${getTerraformPath()}"
-  }
+  //environment {
+    //PATH = "${PATH}:${getTerraformPath()}"
+  //}
   stages{
-    stage('terraform '){
-      steps{
-        sh "terraform -version"
+    stage ('Check Terraform Version') {
+         steps {
+            script {
+            def tfhome = tool name: 'Terraform-12', type: 'org.jenkinsci.plugins.terraform.TerraformInstallation'
+            env.PATH = "${tfhome}:${env.PATH}"
+          }
+          sh 'terraform --version'
+         }
       }
-    }
-  }
-}
 
-def getTerraformPath(){
-  def tfHome = tool name: 'terraform-12', type: 'org.jenkinsci.plugins.terraform.TerraformInstallation'
-  return tfhome
-}
+//def getTerraformPath(){
+  //def tfHome = tool name: 'terraform-12', type: 'org.jenkinsci.plugins.terraform.TerraformInstallation'
+  //return tfhome
+//}
